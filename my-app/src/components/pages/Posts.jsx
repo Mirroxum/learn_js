@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import PostService from "./components/API/PostService";
-import { useFetching } from "./components/hooks/useFetching";
-import { usePosts } from "./components/hooks/usePosts";
-import PostFilter from "./components/PostFilter";
-import PostForm from "./components/PostForm";
-import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
-import MyLoader from "./components/UI/loader/MyLoader";
-import MyModal from "./components/UI/modal/MyModal";
-import Pagination from "./components/UI/paginator/Pagination";
-import {getPageCount} from "./components/utils/pages";
+import PostService from "../API/PostService";
+import { useFetching } from "../hooks/useFetching";
+import { usePosts } from "../hooks/usePosts";
+import PostFilter from "../PostFilter.jsx";
+import PostForm from "../PostForm";
+import PostList from "../PostList";
+import MyButton from "../UI/button/MyButton";
+import MyLoader from "../UI/loader/MyLoader";
+import MyModal from "../UI/modal/MyModal";
+import Pagination from "../UI/paginator/Pagination";
+import {getPageCount} from "../utils/pages";
 
 function Posts() {
 
@@ -62,15 +62,16 @@ function Posts() {
         }
       {isPostsLoading
         ? <div style={{display: "flex", justifyContent: "center", marginTop: "50px"}}><MyLoader/></div>
-        : <PostList 
+        : <div><PostList 
             posts={sortedAndSearchedPosts}
             remove={removePost}
             title="Список постов JS"/>
+          <Pagination 
+            totalPages={totalPages}
+            page={page} 
+            changePage={changePage}/>
+          </div>
       }
-      <Pagination 
-        totalPages={totalPages}
-        page={page} 
-        changePage={changePage}/>
     </div>
   );
 }
