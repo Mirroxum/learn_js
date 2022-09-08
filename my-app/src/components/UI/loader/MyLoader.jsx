@@ -5,7 +5,6 @@ import classes from "./MyLoader.module.css";
 const MyLoader = (props) => {
     return (
         <div {...props} className={classes.loader}>
-
         </div>
     );
 };

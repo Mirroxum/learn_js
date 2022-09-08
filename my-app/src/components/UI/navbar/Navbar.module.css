@@ -1,0 +1,54 @@
+.navbar {
+    height: 50px;
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    direction: column;
+    padding: 0 15px;
+    background: teal;
+  
+  }
+
+.navbar__content {
+    width: 800px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navbar__button {
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    margin: 5px;
+    background: teal;
+    border: 0px;
+    border-radius: 50%;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+}
+
+.navbar__button:hover {
+  background: black;
+  cursor: pointer;
+}
+
+
+.navbar__links {
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    padding: 5px;
+    margin: 5px;
+    background: teal;
+    font-family: 'Times New Roman', Times, serif;
+
+  }
+
+.navbar__links:hover {
+    background: black;
+}
+
+.navbar__links:visited {
+    color: white;
+  }

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PostService from "../API/PostService";
 import { useFetching } from "../hooks/useFetching";
+import { useObserver } from "../hooks/useObserver";
 import { usePosts } from "../hooks/usePosts";
 import PostFilter from "../PostFilter.jsx";
 import PostForm from "../PostForm";
@@ -8,7 +9,6 @@ import PostList from "../PostList";
 import MyButton from "../UI/button/MyButton";
 import MyLoader from "../UI/loader/MyLoader";
 import MyModal from "../UI/modal/MyModal";
-import Pagination from "../UI/paginator/Pagination";
 import {getPageCount} from "../utils/pages";
 
 function Posts() {
@@ -20,15 +20,21 @@ function Posts() {
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+    const lastElement = useRef()
 
     const [fetchPosts, isPostsLoading, PostsError] = useFetching(async() => {
       const response = await PostService.getAll(limit, page);
-      setPosts(response.data);
+      setPosts([...posts, ...response.data]);
       const totalCount = response.headers['x-total-count'];
       setTotalPages(getPageCount(totalCount, limit));
     })
 
-    useEffect(() => {fetchPosts()}, [page]);
+    useObserver(lastElement, page < totalPages, isPostsLoading, () => {
+      setPage(page+1)
+    })
+
+    useEffect(() => {fetchPosts()}, [page, limit]);
+
     
     const createPost = (newPost) => {
       setPosts([...posts, newPost]);
@@ -37,10 +43,6 @@ function Posts() {
 
     const removePost = (post) => {
       setPosts(posts.filter(p => p !== post));
-    }
-
-    const changePage = (page) => {
-      setPage(page)
     }
 
   return (
@@ -60,18 +62,14 @@ function Posts() {
       {PostsError &&
         <h1>Произошла ошибка: {PostsError}</h1>
         }
-      {isPostsLoading
-        ? <div style={{display: "flex", justifyContent: "center", marginTop: "50px"}}><MyLoader/></div>
-        : <div><PostList 
+        <div><PostList 
             posts={sortedAndSearchedPosts}
             remove={removePost}
             title="Список постов JS"/>
-          <Pagination 
-            totalPages={totalPages}
-            page={page} 
-            changePage={changePage}/>
-          </div>
-      }
+        <div ref = {lastElement} style={{height:20}}></div>
+      {isPostsLoading &&
+        <div style={{display: "flex", justifyContent: "center", marginTop: "50px"}}><MyLoader/></div>}
+    </div>
     </div>
   );
 }

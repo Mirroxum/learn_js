@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 export default class PostService {
     static async getAll(limit=10, page=1) {
@@ -13,7 +14,7 @@ export default class PostService {
 
     static async getPost(postId) {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts/' + postId)
-            return response 
+            return response
         }
 
     static async getComment(postId) {

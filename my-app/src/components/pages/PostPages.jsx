@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import PostService from "../API/PostService";
 import { useFetching } from "../hooks/useFetching";
 import MyLoader from "../UI/loader/MyLoader";
 
 function PostsPage() {
+    const navigate = useNavigate()
     const params = useParams()
     const [post, setPost] = useState({})
     const [comments, setComments] = useState([])
@@ -19,23 +20,30 @@ function PostsPage() {
     useEffect(() => {
         fetchPostById();
         fetchComment();
+        console.log(error)
     }, [])
   return (
-    <div>
-    <h1>Мы перешли на страницу поста №{params.id}</h1>
-    {isLoading
-        ? <MyLoader/>
-        : <div>{post.id}, {post.title}</div>}
-    <h1>Комментарии</h1>
-    {isLoadingComment
-        ? <MyLoader/>
-        : <div>{comments.map(comment => 
-            <div key={comment.id} style={{marginTop: "15px"}}>
+    <div className="App">
+    {isLoading && isLoadingComment
+        ? <div style={{display: "flex", justifyContent: "center", marginTop: "100px"}}><MyLoader/></div>
+        :<div>
+            <div className="post__page">
+                <h1 align="center">{post.id}. {post.title}</h1>
+                <br/>
+                <hr/>
+                <br/>
+                {post.body}
+            </div>
+            <br/>
+            <h3 align="center">Комментарии</h3>
+            <div>{comments.map(comment => 
+            <div className="comment" key={comment.id} style={{marginTop: "15px"}}>
                 <h5>{comment.name}</h5>
-                <h5>{comment.email}</h5>
                 <div>{comment.body}</div>
-            </div>)}</div>}
-
+            </div>)}</div>
+        </div> 
+        }
+    {error && navigate(`/error`)}
     </div>
   );
 }
