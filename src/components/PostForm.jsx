@@ -17,6 +17,7 @@ const PostForm = ({create}) => {
 
     return (
         <div>
+            <h3 align="center">Создать новый пост</h3>
             <form>
                 <MyInput 
                     value = {post.title}
